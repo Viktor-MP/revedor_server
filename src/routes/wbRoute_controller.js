@@ -27,7 +27,7 @@ class WbRoute_controller {
             )
 
             await URl_Generator.modifyData(response.data.data.products)
-
+            console.log(response)
             res.json(response.data) // Send the Wildberries data as API response
         } catch (error) {
             console.error("Error fetching data:", error.message)
