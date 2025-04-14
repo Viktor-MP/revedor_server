@@ -60,6 +60,7 @@ class MailService {
 
     sendToOwner = async (req, res) => {
         const { name, userEmail, subject, message } = req.body
+        console.log("to", process.env.OWNER_EMAIL)
         console.log("Email received fromm:", name, userEmail, subject, message)
         if (!name || !userEmail || !subject || !message) {
             return res
@@ -73,7 +74,6 @@ class MailService {
         }
 
         const html = OwnerEmailTemplate({ name, userEmail, subject, message })
-        console.log("to", process.env.OWNER_EMAIL)
         try {
             const ownerResponse = await this.sendGmail(
                 process.env.OWNER_EMAIL,
