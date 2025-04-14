@@ -30,12 +30,7 @@ const corsOptions = {
     credentials: true, // if you need cookies or auth
 }
 
-app.use(
-    cors({
-        credentials: true,
-        origin: process.env.CLIENT_URL,
-    })
-)
+app.use(cors(corsOptions))
 
 // Use body-parser middleware
 app.use(cookieParser())
@@ -44,8 +39,6 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(express.static(path.join(__dirname, "build")))
 
 app.use("/api", router)
-
-app.use(cors(corsOptions))
 
 app.use(errorMiddleware)
 
