@@ -31,6 +31,8 @@ const corsOptions = {
     credentials: true, // if you need cookies or auth
 }
 
+console.log("Long time to load")
+
 app.use(cors(corsOptions))
 
 // Use body-parser middleware
