@@ -8,15 +8,28 @@ const PORT = process.env.PORT || 5001
 const bodyParser = require("body-parser")
 const router = require("./src/routes/router")
 const errorMiddleware = require("./src/middlewares/error-middleware")
+const cors = require("cors")
 
 // access for every user
 
 const allowedOrigins = [
-    "http://revedor.codematter.am",
-    "http://localhost:3000",
-    "http://localhost:5173",
+    process.env.CLIENT_URL,
+    process.env.CLIENT_SURL, // (optional: add https if needed)
 ]
-const cors = require("cors")
+
+const corsOptions = {
+    origin: function (origin, callback) {
+        // allow requests with no origin like mobile apps or curl
+        if (!origin) return callback(null, true)
+        if (allowedOrigins.includes(origin)) {
+            callback(null, true)
+        } else {
+            callback(new Error("Not allowed by CORS"))
+        }
+    },
+    credentials: true, // if you need cookies or auth
+}
+
 app.use(
     cors({
         credentials: true,
@@ -31,10 +44,13 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(express.static(path.join(__dirname, "build")))
 
 app.use("/api", router)
+
+app.use(cors(corsOptions))
+
 app.use(errorMiddleware)
 
 // Front app run requests
-app.get("*", (req, res) => {
+app.get((req, res) => {
     res.sendFile(path.join(__dirname, "build", "index.html"))
 })
 
