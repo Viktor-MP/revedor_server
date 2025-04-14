@@ -60,7 +60,7 @@ class MailService {
 
     sendToOwner = async (req, res) => {
         const { name, userEmail, subject, message } = req.body
-        console.log("Email received from:", name, userEmail, subject, message)
+        console.log("Email received fromm:", name, userEmail, subject, message)
         if (!name || !userEmail || !subject || !message) {
             return res
                 .status(400)
