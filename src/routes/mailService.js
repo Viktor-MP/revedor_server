@@ -73,7 +73,7 @@ class MailService {
         }
 
         const html = OwnerEmailTemplate({ name, userEmail, subject, message })
-
+        console.log("to", process.env.OWNER_EMAIL)
         try {
             const ownerResponse = await this.sendGmail(
                 process.env.OWNER_EMAIL,
