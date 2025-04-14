@@ -11,7 +11,11 @@ const errorMiddleware = require("./src/middlewares/error-middleware")
 
 // access for every user
 
-const allowedOrigins = ["http://localhost:3000", "http://localhost:5173"]
+const allowedOrigins = [
+    "http://revedor.codematter.am",
+    "http://localhost:3000",
+    "http://localhost:5173",
+]
 const cors = require("cors")
 app.use(
     cors({
