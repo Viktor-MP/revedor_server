@@ -60,7 +60,17 @@ class MailService {
 
     sendToOwner = async (req, res) => {
         const { name, userEmail, subject, message } = req.body
-        console.log("Email received from:", name, userEmail)
+        console.log("Email received from:", name, userEmail, subject, message)
+        if (!name || !userEmail || !subject || !message) {
+            return res
+                .status(400)
+                .json({ success: false, message: "All fields are required" })
+        }
+        if (!userEmail.includes("@")) {
+            return res
+                .status(400)
+                .json({ success: false, message: "Invalid email address" })
+        }
 
         const html = OwnerEmailTemplate({ name, userEmail, subject, message })
 
@@ -70,7 +80,7 @@ class MailService {
                 "New Contact Form Submission",
                 html
             )
-
+            console.log("Owner Email", process.env.OWNER_EMAIL)
             if (!ownerResponse.success) {
                 return res.status(500).json(ownerResponse)
             }
