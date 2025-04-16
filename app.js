@@ -14,8 +14,10 @@ const cors = require("cors")
 
 const allowedOrigins = [
     process.env.CLIENT_URL,
-    process.env.CLIENT_SURL, // (optional: add https if needed)
+    process.env.CLIENT_SURL,
+    "http://localhost:5173", // (optional: add https if needed)
 ]
+console.log("Allowed origins: ", allowedOrigins)
 
 const corsOptions = {
     origin: function (origin, callback) {
@@ -39,17 +41,16 @@ app.use(cors(corsOptions))
 app.use(cookieParser())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
-app.use(express.static(path.join(__dirname, "build")))
 
 app.use("/api", router)
 
 app.use(errorMiddleware)
 
 // Front app run requests
-app.get((req, res) => {
+app.use(express.static(path.join(__dirname, "build")))
+app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, "build", "index.html"))
 })
-
 const startApp = async () => {
     try {
         app.listen(PORT, () => {
