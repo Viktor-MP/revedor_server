@@ -15,23 +15,29 @@ const cors = require("cors")
 const allowedOrigins = [
     process.env.CLIENT_URL,
     process.env.CLIENT_SURL,
-    "http://localhost:5173", // (optional: add https if needed)
+    "http://localhost:5000", // (optional: add https if needed)
 ]
-console.log("Allowed origins: ", allowedOrigins)
 
 const corsOptions = {
     origin: function (origin, callback) {
-        // allow requests with no origin like mobile apps or curl
+        console.log("Request Origin:", origin)
+        console.log("Allowed Origins:", allowedOrigins)
+
+        // Allow requests with no origin (e.g., mobile apps or curl)
         if (!origin) return callback(null, true)
+
         if (allowedOrigins.includes(origin)) {
-            callback(null, true)
-            console.log("CORS enabled for: ", origin)
+            console.log("CORS enabled for:", origin)
+            return callback(null, true)
         } else {
-            callback(new Error("Not allowed by CORS"))
+            console.warn("CORS blocked for:", origin)
+            return callback(new Error("Not allowed by CORS"))
         }
     },
-    credentials: true, // if you need cookies or auth
+    credentials: true,
 }
+
+console.log("Allowed origins: ", allowedOrigins)
 
 console.log("Long time to load")
 
@@ -45,6 +51,13 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use("/api", router)
 
 app.use(errorMiddleware)
+app.use((err, req, res, next) => {
+    if (err.message === "Not allowed by CORS") {
+        console.error("CORS error:", err.message)
+        return res.status(403).json({ error: "CORS policy: Not allowed" })
+    }
+    next(err)
+})
 
 // Front app run requests
 app.use(express.static(path.join(__dirname, "build")))
