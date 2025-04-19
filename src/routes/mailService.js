@@ -76,8 +76,7 @@ class MailService {
         const html = OwnerEmailTemplate({ name, userEmail, subject, message })
         try {
             const ownerResponse = await this.sendGmail(
-                // process.env.OWNER_EMAIL,
-                "vik.mp20@gmail.com",
+                process.env.OWNER_EMAIL,
                 "New Contact Form Submission",
                 html
             )
