@@ -60,9 +60,9 @@ app.use((err, req, res, next) => {
 })
 
 // Front app run requests
-app.use(express.static(path.join(__dirname, "build")))
+app.use(express.static(path.join(__dirname, "/var/www/revedor/dist")))
 app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "build", "index.html"))
+    res.sendFile(path.join("/var/www/revedor/dist/index.html"))
 })
 const startApp = async () => {
     try {
